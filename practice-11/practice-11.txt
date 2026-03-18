@@ -1,0 +1,64 @@
+Write-Host "===== Practice 11: Kalkulaator =====" -ForegroundColor Cyan
+
+try {
+    [decimal]$arv1 = Read-Host "Sisesta esimene arv"
+    [decimal]$arv2 = Read-Host "Sisesta teine arv"
+}
+catch {
+    Write-Host "Viga: palun sisesta korrektne arv (nt 10 või 10.5)" -ForegroundColor Red
+    exit
+}
+
+Write-Host "`nVali tehe:" -ForegroundColor Green
+Write-Host "1: Liitmine (+)" -ForegroundColor Yellow
+Write-Host "2: Lahutamine (-)" -ForegroundColor Yellow
+Write-Host "3: Korrutamine (*)" -ForegroundColor Yellow
+Write-Host "4: Jagamine (/)" -ForegroundColor Yellow
+Write-Host "5: Jääk (%)" -ForegroundColor Yellow
+
+$valik = Read-Host "Sisesta valik (1-5)"
+
+switch ($valik) {
+
+    "1" {
+        $tulemus = $arv1 + $arv2
+        Write-Host "`nTulemus: $arv1 + $arv2 = $tulemus" -ForegroundColor Green
+    }
+
+    "2" {
+        $tulemus = $arv1 - $arv2
+        Write-Host "`nTulemus: $arv1 - $arv2 = $tulemus" -ForegroundColor Green
+    }
+
+    "3" {
+        $tulemus = $arv1 * $arv2
+        Write-Host "`nTulemus: $arv1 * $arv2 = $tulemus" -ForegroundColor Green
+    }
+
+    "4" {
+        if ($arv2 -eq 0) {
+            Write-Host "`nViga: nulliga ei saa jagada!" -ForegroundColor Red
+        }
+        else {
+            $tulemus = $arv1 / $arv2
+            Write-Host "`nTulemus: $arv1 / $arv2 = $tulemus" -ForegroundColor Green
+        }
+    }
+
+    "5" {
+        [int]$i1 = $arv1
+        [int]$i2 = $arv2
+
+        if ($i2 -eq 0) {
+            Write-Host "`nViga: nulliga ei saa jääki arvutada!" -ForegroundColor Red
+        }
+        else {
+            $tulemus = $i1 % $i2
+            Write-Host "`nTulemus: $i1 % $i2 = $tulemus" -ForegroundColor Green
+        }
+    }
+
+    default {
+        Write-Host "`nVale valik!" -ForegroundColor Red
+    }
+}
