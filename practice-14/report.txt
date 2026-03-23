@@ -1,0 +1,51 @@
+============================================================
+SÜSTEEMIARUANNE
+Kuupäev ja kellaaeg : Mon Mar 23 04:53:33 PDT 2026
+============================================================
+
+Kasutaja nimi        : lukas
+Arvuti nimi          : DESKTOP-55KJQNM
+Sisselogitud kasutaja: Admin
+PowerShelli versioon : 5
+
+--- Tervitused ---
+Tere, lukas! (1)
+Tere, lukas! (2)
+Tere, lukas! (3)
+Tere, lukas! (4)
+Tere, lukas! (5)
+Tere, lukas! (6)
+Tere, lukas! (7)
+Tere, lukas! (8)
+Tere, lukas! (9)
+Tere, lukas! (10)
+Tere, lukas! (11)
+Tere, lukas! (12)
+Tere, lukas! (13)
+
+--- 3 töötavat protsessi ---
+
+Name   Id      CPU
+----   --      ---
+bash 3048 0.109375
+bash 4048 3.734375
+bash 6724 0.015625
+
+
+
+--- 3 teenust ---
+
+Name          Status
+----          ------
+AarSvc_fe29e Stopped
+AJRouter     Stopped
+ALG          Stopped
+
+
+
+--- Versiooni kontroll ---
+PowerShelli versioon (5) on sobiv.
+
+===========================
+Script finished successfully
+===========================
