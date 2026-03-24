@@ -1,15 +1,8 @@
-import random  # impordime random mooduli, et saaks kasutada juhuslikkust
+$varvid = @("Red", "Green", "Yellow", "Blue")
 
-# loome nimekirja võimalikest gruppidest (värvidest)
-varvid = ["Red", "Green", "Yellow", "Blue"]
+Write-Host "RollNumber`tGroup"
 
-# prindime tabeli päise
-print("RollNumber\tGroup")
-
-# käime läbi rollinumbrid 1 kuni 20
-for roll in range(1, 21):
-    # valime juhuslikult ühe värvi nimekirjast
-    grupp = random.choice(varvid)
-    
-    # prindime rollinumbri ja määratud grupi
-    print(f"{roll}\t\t{grupp}")
+for ($roll = 1; $roll -le 20; $roll++) {
+    $grupp = $varvid | Get-Random
+    Write-Host "$roll`t`t$grupp"
+}
