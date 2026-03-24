@@ -1,11 +1,9 @@
 $count = 0
 
-do
-{
+do {
     $process = Get-Process -Name notepad -ErrorAction SilentlyContinue
 
-    if ($process)
-    {
+    if ($process) {
         Write-Host "Notepad is running"
         $count++
         Start-Sleep -Seconds 1
