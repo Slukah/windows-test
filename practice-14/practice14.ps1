@@ -1,111 +1,83 @@
-#!/bin/bash
-# practice14.sh
-# Kokkuvõttev skript – Practice 14 (Git Bash)
- 
- 
 # 1. KASUTAJA SISEND
- 
-# Küsi kasutaja nime
-read -p "Sisesta oma nimi: " userName
- 
-# Küsi, mitu korda tervitust kuvada
-read -p "Mitu korda soovid tervitust kuvada: " greetCount
- 
- 
+$userName   = Read-Host "Sisesta oma nimi"
+$greetCount = [int](Read-Host "Mitu korda soovid tervitust kuvada")
+
 # 2. TSÜKKEL – tervituse kuvamine
- 
-# Kasuta for-tsüklit tervituste kuvamiseks
-for (( i=1; i<=greetCount; i++ )); do
-    echo "Tere, $userName! ($i)"
-done
- 
- 
+for ($i = 1; $i -le $greetCount; $i++) {
+    Write-Host "Tere, $userName! ($i)"
+}
+
 # 3. SÜSTEEMIINFO
- 
-# Kogu süsteemiinfo muutujatesse
-computerName=$(hostname)
-loggedInUser=$(whoami)
-psVersion=$(powershell.exe -NoProfile -Command '$PSVersionTable.PSVersion.Major' 2>/dev/null | tr -d '\r')
- 
-# Kuva süsteemiinfo ekraanile
-echo ""
-echo "--- Süsteemiinfo ---"
-echo "Arvuti nimi           : $computerName"
-echo "Sisselogitud kasutaja : $loggedInUser"
-echo "PowerShelli versioon  : $psVersion"
- 
- 
+$computerName   = $env:COMPUTERNAME
+$loggedInUser   = $env:USERNAME
+$psVersion      = $PSVersionTable.PSVersion.Major
+
+Write-Host ""
+Write-Host "--- Süsteemiinfo ---"
+Write-Host "Arvuti nimi           : $computerName"
+Write-Host "Sisselogitud kasutaja : $loggedInUser"
+Write-Host "PowerShelli versioon  : $psVersion"
+
 # 4. CMDLET'IDE KASUTAMINE
- 
-# Kuva 3 töötavat protsessi
-echo ""
-echo "--- 3 töötavat protsessi ---"
-powershell.exe -NoProfile -Command 'Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU -AutoSize' 2>/dev/null
- 
-# Kuva 3 teenust koos nende olekuga
-echo "--- 3 teenust ---"
-powershell.exe -NoProfile -Command 'Get-Service | Select-Object -First 3 | Format-Table Name, Status -AutoSize' 2>/dev/null
- 
- 
+Write-Host ""
+Write-Host "--- 3 töötavat protsessi ---"
+Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU -AutoSize
+
+Write-Host "--- 3 teenust ---"
+Get-Service | Select-Object -First 3 | Format-Table Name, Status -AutoSize
+
 # 5. TINGIMUSLAUSE – PowerShelli versiooni kontroll
- 
-echo ""
-echo "--- Versiooni kontroll ---"
- 
-# Kontrolli, kas PowerShelli põhiversioon on alla 5
-if [ "$psVersion" -lt 5 ] 2>/dev/null; then
-    echo "HOIATUS: PowerShelli versioon ($psVersion) on alla 5. Palun uuenda!"
-else
-    echo "PowerShelli versioon ($psVersion) on sobiv."
-fi
- 
- 
+Write-Host ""
+Write-Host "--- Versiooni kontroll ---"
+if ($psVersion -lt 5) {
+    Write-Host "HOIATUS: PowerShelli versioon ($psVersion) on alla 5. Palun uuenda!" -ForegroundColor Yellow
+} else {
+    Write-Host "PowerShelli versioon ($psVersion) on sobiv." -ForegroundColor Green
+}
+
 # 6. VÄLJUNDI SALVESTAMINE FAILI
- 
-reportFile="report.txt"
- 
-# Kirjuta kogu aruanne faili
-{
-    echo "============================================================"
-    echo "SÜSTEEMIARUANNE"
-    echo "Kuupäev ja kellaaeg : $(date)"
-    echo "============================================================"
-    echo ""
-    echo "Kasutaja nimi        : $userName"
-    echo "Arvuti nimi          : $computerName"
-    echo "Sisselogitud kasutaja: $loggedInUser"
-    echo "PowerShelli versioon : $psVersion"
-    echo ""
-    echo "--- Tervitused ---"
-    for (( i=1; i<=greetCount; i++ )); do
-        echo "Tere, $userName! ($i)"
-    done
-    echo ""
-    echo "--- 3 töötavat protsessi ---"
-    powershell.exe -NoProfile -Command 'Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU -AutoSize' 2>/dev/null
-    echo ""
-    echo "--- 3 teenust ---"
-    powershell.exe -NoProfile -Command 'Get-Service | Select-Object -First 3 | Format-Table Name, Status -AutoSize' 2>/dev/null
-    echo ""
-    echo "--- Versiooni kontroll ---"
-    if [ "$psVersion" -lt 5 ] 2>/dev/null; then
-        echo "HOIATUS: PowerShelli versioon ($psVersion) on alla 5!"
-    else
-        echo "PowerShelli versioon ($psVersion) on sobiv."
-    fi
-    echo ""
-    echo "==========================="
-    echo "Script finished successfully"
-    echo "==========================="
-} > "$reportFile"
- 
-echo ""
-echo "Aruanne salvestatud faili: $reportFile"
- 
- 
+$reportFile = "report.txt"
+
+$report = @"
+============================================================
+SÜSTEEMIARUANNE
+Kuupäev ja kellaaeg : $(Get-Date)
+============================================================
+
+Kasutaja nimi        : $userName
+Arvuti nimi          : $computerName
+Sisselogitud kasutaja: $loggedInUser
+PowerShelli versioon : $psVersion
+
+--- Tervitused ---
+"@
+
+for ($i = 1; $i -le $greetCount; $i++) {
+    $report += "`nTere, $userName! ($i)"
+}
+
+$report += "`n`n--- 3 töötavat protsessi ---`n"
+$report += (Get-Process | Select-Object -First 3 | Format-Table Name, Id, CPU -AutoSize | Out-String)
+
+$report += "`n--- 3 teenust ---`n"
+$report += (Get-Service | Select-Object -First 3 | Format-Table Name, Status -AutoSize | Out-String)
+
+$report += "`n--- Versiooni kontroll ---`n"
+if ($psVersion -lt 5) {
+    $report += "HOIATUS: PowerShelli versioon ($psVersion) on alla 5!"
+} else {
+    $report += "PowerShelli versioon ($psVersion) on sobiv."
+}
+
+$report += "`n`n===========================`nScript finished successfully`n==========================="
+
+$report | Out-File -FilePath $reportFile -Encoding UTF8
+
+Write-Host ""
+Write-Host "Aruanne salvestatud faili: $reportFile"
+
 # 7. VORMINDATUD LÕPPTEADE
- 
-echo ""
-echo "==========================="
-echo "Script finished successfully"
-echo "==========================="
+Write-Host ""
+Write-Host "==========================="
+Write-Host "Script finished successfully"
+Write-Host "==========================="
